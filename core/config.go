@@ -115,11 +115,26 @@ func (c *Config) GetOption(name string) (value string, err error) {
 	return
 }
 
+func (c *Config) updateOptionValue(name, value string) bool {
+	for i, option := range *c.Options {
+		if option.Name == name {
+			o := *c.Options
+			o[i] = Option{Name: name, Value: value}
+			return true
+		}
+	}
+	return false
+}
+
 // SetOption append an new Option to Config.Options
 func (c *Config) SetOption(name, value string) {
 	formattedValue := strings.Replace(value, "\n", "", -1)
-	option := Option{Name: name, Value: formattedValue}
-	*c.Options = append(*c.Options, option)
+	keyFoundAndUpdated := c.updateOptionValue(name, formattedValue)
+
+	if !keyFoundAndUpdated {
+		option := Option{Name: name, Value: formattedValue}
+		*c.Options = append(*c.Options, option)
+	}
 }
 
 // SaveAllOptions saves all options in local repo config file via GitCmd.Do.

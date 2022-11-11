@@ -167,6 +167,42 @@ func TestSetOptionAppendValue(t *testing.T) {
 	assert.Equal(t, len(*config.Options), 2)
 }
 
+// test SetOption
+func TestSetOptionShouldOverwriteOldOptionInsteadOfAppend(t *testing.T) {
+	name := "artifex.config.some"
+	value := "newVal"
+
+	opt := Option{Name: name, Value: "oldVal"}
+	options := []Option{opt}
+
+	config := Config{
+		GitCmd:  new(MockGit),
+		Options: &options,
+	}
+	config.SetOption(name, value)
+
+	assert.Equal(t, 1, len(*config.Options))
+}
+
+// test SetOption
+func TestSetOptionShouldOverwriteOldValueInsteadOfAppend(t *testing.T) {
+	name := "artifex.config.some"
+	newVal := "newVal"
+
+	opt := Option{Name: name, Value: "oldVal"}
+	options := []Option{opt}
+
+	config := Config{
+		GitCmd:  new(MockGit),
+		Options: &options,
+	}
+	config.SetOption(name, newVal)
+	o := *config.Options
+	option := o[0]
+
+	assert.Equal(t, newVal, option.Value)
+}
+
 // test SaveAllOptions
 func TestSaveAllOptionsSendCorrectParsedOptions(t *testing.T) {
 	name := "artifex.config.some"
