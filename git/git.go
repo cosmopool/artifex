@@ -1,9 +1,10 @@
 package git
 
 import (
-	"log"
 	"os/exec"
 	"strings"
+
+	"github.com/cosmopool/artifex/logger"
 )
 
 // GitExec is separate so we can inject in Git and test all methods
@@ -20,18 +21,18 @@ type Git struct{}
 // Do executes a git command e.g.: 'git config --list'
 func (g *Git) Do(command ...string) (output string, err error) {
 	cmd := exec.Command("git", command...)
-	log.Printf("[DEBUG] gitDo command: %s", strings.Join(cmd.Args, " "))
+	logger, err := logger.GetLogger()
+	logger.Debugf("command: %s", strings.Join(cmd.Args, " "))
 	stdoutBytes, err := cmd.Output()
 	stdout := string(stdoutBytes)
 
 	if stdout != "" {
-		log.Printf("[DEBUG] gitDo output: %s", stdout)
+		logger.Debugf("output: %s", stdout)
 	}
 	if err != nil {
-		log.Printf("[DEBUG] gitDo err: %s", cmd.Stderr)
+		logger.Errorf("err: %s", cmd.Stderr)
 	}
 
-	log.Println()
 	return string(stdout), err
 }
 
