@@ -81,7 +81,7 @@ func (c *Config) parseOptions() {
 	gitOptions, _ := c.GitCmd.GetAllOptions()
 
 	for _, config := range gitOptions {
-		isArtifexConfig := strings.Contains(config, "artifex")
+		isArtifexConfig := strings.HasPrefix(config, "artifex")
 
 		if isArtifexConfig {
 			name, value, found := strings.Cut(config, "=")
