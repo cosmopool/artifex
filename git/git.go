@@ -20,7 +20,7 @@ type Git struct{}
 // Do executes a git command e.g.: 'git config --list'
 func (g *Git) Do(command ...string) (output string, err error) {
 	cmd := exec.Command("git", command...)
-	log.Printf("[DEBUG] gitDo command: %s", cmd.Args)
+	log.Printf("[DEBUG] gitDo command: %s", strings.Join(cmd.Args, " "))
 	stdoutBytes, err := cmd.Output()
 	stdout := string(stdoutBytes)
 
@@ -28,9 +28,10 @@ func (g *Git) Do(command ...string) (output string, err error) {
 		log.Printf("[DEBUG] gitDo output: %s", stdout)
 	}
 	if err != nil {
-		log.Printf("[DEBUG] gitDo err: %s", err)
+		log.Printf("[DEBUG] gitDo err: %s", cmd.Stderr)
 	}
 
+	log.Println()
 	return string(stdout), err
 }
 
@@ -44,7 +45,9 @@ func (g *Git) GetAllOptions() (allOptions []string, err error) {
 // SaveAllOptions saves all options in local repo config file via GitCmd.Do.
 func (g *Git) SetAllOptions(options []string) (err error) {
 	for _, option := range options {
-		_, err = g.Do("config", option)
+		opt, val, _ := strings.Cut(option, " ")
+		commands := []string{"config", opt, val}
+		_, err = g.Do(commands...)
 		if err != nil {
 			return
 		}
