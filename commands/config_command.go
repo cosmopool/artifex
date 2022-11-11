@@ -3,14 +3,16 @@ package commands
 import (
 	"fmt"
 
+	"github.com/cosmopool/artifex/core"
 	"github.com/spf13/cobra"
 )
 
-var usecaseConfig *bool
+var repositoryConfig *bool
+var config = core.GetConfig()
 
 func configInit() {
-	usecaseConfig = configCmd.Flags().BoolP("usecase", "u", false, "Configure 'usecases' path")
-	usecaseConfig = configCmd.Flags().BoolP("list", "l", false, "List all configuration values")
+	repositoryConfig = configCmd.Flags().BoolP("repository", "u", false, "Configure 'repositorys' path")
+	repositoryConfig = configCmd.Flags().BoolP("list", "l", false, "List all configuration values")
 }
 
 func existsElement(array []string, str string) bool {
@@ -29,17 +31,18 @@ var configCmd = &cobra.Command{
 	more. All the configuration the application needs to run`,
 	Run: func(cmd *cobra.Command, args []string) {
 		boolean := true
-		configUsecase(&boolean)
+		configRepository(&boolean)
 		configRepositoryImplementation(&boolean)
 		configRepositoryInterface(&boolean)
 	},
 }
 
-func configUsecase(shouldConfig *bool) {
+func configRepository(shouldConfig *bool) {
 	if *shouldConfig {
-		fmt.Print("The implementation path for usecases (e.g. /src/domain/usecases/): ")
-		// str := core.ReadTerminal()
-		// git.SetConfig(core.USECASE_IMPLEMENTATION_PATH, str)
+		fmt.Print("The implementation path for repository (e.g. /src/infra/repositories/): ")
+		str := core.ReadTerminal()
+		c := *config
+		c.SetOption(core.REPOSITORY_IMPLEMENTATION_PATH, str)
 		fmt.Println()
 	}
 }
@@ -49,10 +52,9 @@ func configRepositoryInterface(shouldConfig *bool) {
 		fmt.Println("Write a exemple of a REPOSITORY INTERFACE name")
 		// fmt.Println("It must be a repository named 'Config' or 'config'")
 		fmt.Print("(e.g. 'ConfigRepositoryInterface'): ")
-		// str := core.ReadTerminal()
-		// git.SetConfig(core.REPOSITORY_INTERFACE, str)
-		// fmt.Println()
-		// core.GetTemplate(str)
+		str := core.ReadTerminal()
+		c := *config
+		c.SetOption(core.REPOSITORY_INTERFACE, str)
 		fmt.Println()
 	}
 }
@@ -62,10 +64,9 @@ func configRepositoryImplementation(shouldConfig *bool) {
 		fmt.Println("Write a exemple of a REPOSITORY IMPLEMENTATION name")
 		// fmt.Println("It must be a repository named 'Config' or 'config'")
 		fmt.Print("(e.g. 'ConfigRepositoryImplementation'): ")
-		// str := core.ReadTerminal()
-		// git.SetConfig(core.REPOSITORY_IMPLEMENTATION, str)
-		// fmt.Println()
-		// core.GetTemplate(str)
+		str := core.ReadTerminal()
+		c := *config
+		c.SetOption(core.REPOSITORY_IMPLEMENTATION, str)
 		fmt.Println()
 	}
 }
