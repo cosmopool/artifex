@@ -1,11 +1,11 @@
 package main
 
 import (
+	"log"
 	"os"
 
 	"github.com/cosmopool/artifex/commands"
 	"github.com/cosmopool/artifex/core"
-	"github.com/cosmopool/artifex/git"
 )
 
 type exitCode int
@@ -23,11 +23,13 @@ func main() {
 }
 
 func mainRun() exitCode {
-	git := git.Git{}
-	options := make([]core.Option, 0, 30)
-	config := core.Config{GitCmd: &git, Options: &options}
+	config := core.GetConfig()
 	config.Init()
 
 	code := commands.Execute()
+	err := config.SaveAllOptions()
+	if err != nil {
+		log.Fatalln(err)
+	}
 	return exitCode(code)
 }
