@@ -8,11 +8,12 @@ import (
 )
 
 var repositoryConfig *bool
+var shouldListConfig *bool
 var config = core.GetConfig()
 
 func configInit() {
-	repositoryConfig = configCmd.Flags().BoolP("repository", "u", false, "Configure 'repositorys' path")
-	repositoryConfig = configCmd.Flags().BoolP("list", "l", false, "List all configuration values")
+	repositoryConfig = configCmd.Flags().BoolP("repository", "r", false, "Configure 'repositories' path")
+	shouldListConfig = configCmd.Flags().BoolP("list", "l", false, "List all configuration values")
 }
 
 func existsElement(array []string, str string) bool {
@@ -30,11 +31,20 @@ var configCmd = &cobra.Command{
 	Long: `Configure the layers path, interfaces and implementation names and 
 	more. All the configuration the application needs to run`,
 	Run: func(cmd *cobra.Command, args []string) {
-		boolean := true
-		configRepository(&boolean)
-		configRepositoryImplementation(&boolean)
-		configRepositoryInterface(&boolean)
+		configRepository(repositoryConfig)
+		configRepositoryImplementation(repositoryConfig)
+		configRepositoryInterface(repositoryConfig)
+		listConfig()
 	},
+}
+
+func listConfig() {
+	if *shouldListConfig {
+		options := *config.Options
+		for _, option := range options {
+			fmt.Println(option.Name, option.Value)
+		}
+	}
 }
 
 func configRepository(shouldConfig *bool) {
