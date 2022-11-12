@@ -3,6 +3,7 @@ package core
 import (
 	"fmt"
 	"log"
+	"os/exec"
 	"strings"
 
 	"github.com/cosmopool/artifex/git"
@@ -23,8 +24,9 @@ type IConfiguration interface {
 }
 
 type Config struct {
-	GitCmd  git.IGit
-	Options *[]Option
+	GitCmd     git.IGit
+	Options    *[]Option
+	CurrentDir string
 }
 
 func (c *Config) Init() {
@@ -54,6 +56,10 @@ func (c *Config) Init() {
 		log.Println()
 		log.Fatalln("Use 'artifex config --help' to see more options")
 	}
+
+	cmd := exec.Command("pwd")
+	stdoutBytes, _ := cmd.Output()
+	c.CurrentDir = string(stdoutBytes)
 }
 
 // IsRepoConfigured check if every configuration has some value.
