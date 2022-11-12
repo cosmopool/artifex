@@ -21,7 +21,7 @@ type Git struct{}
 // Do executes a git command e.g.: 'git config --list'
 func (g *Git) Do(command ...string) (output string, err error) {
 	cmd := exec.Command("git", command...)
-	logger, err := logger.GetLogger()
+	logger := logger.GetLogger()
 	logger.Debugf("command: %s", strings.Join(cmd.Args, " "))
 	stdoutBytes, err := cmd.Output()
 	stdout := string(stdoutBytes)
