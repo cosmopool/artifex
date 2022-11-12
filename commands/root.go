@@ -11,6 +11,7 @@ func init() {
 	configInit()
 	rootCmd.AddCommand(configCmd)
 	rootCmd.AddCommand(versionCmd)
+	rootCmd.AddCommand(createCmd)
 	rootCmd.PersistentFlags().BoolVarP(&logger.DebugLevel, "verbose", "v", false, "Verbose output DEBUG level")
 	rootCmd.PersistentFlags().BoolVarP(&logger.InfoLevel, "less-verbose", "n", false, "Less verbose output. Don't show INFO logs")
 }
