@@ -14,7 +14,7 @@ type IConfiguration interface {
 
 type IFileSystem interface {
 	CreateDir(string) error
-	CreateFile(string, string) error
+	CreateFile(path, fileName string) error
 	GeneratePath(dir string) string
 	GenerateFilePath(dir, fileTemplate, file, extension string) string
 	TemplateSeparator(template string) (string, string)
