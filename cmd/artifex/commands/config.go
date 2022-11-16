@@ -6,6 +6,7 @@ import (
 	"os/exec"
 
 	"github.com/cosmopool/artifex/internal/interfaces"
+	"github.com/cosmopool/artifex/internal/terminal"
 	"github.com/urfave/cli/v2"
 )
 
@@ -104,9 +105,7 @@ func InitConfigCommand(deps *interfaces.Dependencies) *cli.Command {
 }
 
 func finishMessage() {
-	cmd := exec.Command("clear")
-	cmd.Stdout = os.Stdout
-	cmd.Run()
+	terminal.Clear()
 
 	fmt.Println()
 	fmt.Println("+――――――――――――――――――――――――――――――――――――――――――――――+")

@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"log"
 	"os"
+	"os/exec"
 	"strings"
 )
 
@@ -14,4 +15,10 @@ func Read() string {
 		log.Fatal(err)
 	}
 	return strings.TrimSuffix(str, "\n")
+}
+
+func Clear() {
+	cmd := exec.Command("clear")
+	cmd.Stdout = os.Stdout
+	cmd.Run()
 }

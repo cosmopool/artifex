@@ -2,19 +2,16 @@ package commands
 
 import (
 	"fmt"
-	"os"
-	"os/exec"
 
 	"github.com/cosmopool/artifex/internal/configuration"
 	"github.com/cosmopool/artifex/internal/interfaces"
+	"github.com/cosmopool/artifex/internal/terminal"
 )
 
 func configUsecase(config interfaces.IConfiguration) (err error) {
 	var option, defaultVal string
 
-	cmd := exec.Command("clear")
-	cmd.Stdout = os.Stdout
-	cmd.Run()
+	terminal.Clear()
 
 	fmt.Println()
 	fmt.Println()
