@@ -84,7 +84,7 @@ func (c *Config) IsRepoConfigured() (emptyOptions []string) {
 // This `gitConfigs` is the output of 'git config --list' command. Each item of
 // `gitConfigs` is a line of the command output.
 func (c *Config) parseOptions() {
-	optionList := ConfigList()
+	optionList := c.ConfigList()
 	options := make([]Option, 0, len(optionList))
 	gitOptions, _ := (c.GitCmd).GetAllOptions()
 
