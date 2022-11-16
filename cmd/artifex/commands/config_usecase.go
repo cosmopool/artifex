@@ -42,7 +42,7 @@ func configUsecase(config interfaces.IConfiguration) (err error) {
 	// USECASE IMPLEMENTATION
 	defaultVal = "ConfigUsecase"
 	fmt.Printf("╰ Implementation name (default: '%s'): ", defaultVal)
-	option = configuration.REPOSITORY_IMPLEMENTATION
+	option = configuration.USECASE_IMPLEMENTATION
 	err = readInput(defaultVal, option, config)
 	if err != nil {
 		return err
