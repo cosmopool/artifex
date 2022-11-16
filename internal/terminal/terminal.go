@@ -15,9 +15,3 @@ func Read() string {
 	}
 	return strings.TrimSuffix(str, "\n")
 }
-
-// func ReadInput(prompt, option string) {
-// 	str := Read()
-// 	c := *config
-// 	c.SetOption(option, str)
-// }
