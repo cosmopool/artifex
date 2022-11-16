@@ -7,18 +7,15 @@ import (
 	"go.uber.org/zap"
 )
 
-var DebugLevel = false
-var InfoLevel = true
+func New(showDebugLevel bool) *zap.SugaredLogger {
+	var prodLogger, pErr = zap.NewProduction()
+	var debugLogger, dErr = zap.NewDevelopment()
 
-var prodLogger, pErr = zap.NewProduction()
-var debugLogger, dErr = zap.NewDevelopment()
-
-func GetLogger() *zap.SugaredLogger {
 	// flushes buffer, if any
 	defer prodLogger.Sync()
 	defer debugLogger.Sync()
 
-	if DebugLevel {
+	if showDebugLevel {
 		if dErr != nil {
 			fmt.Println("Could not get debug logger:", dErr)
 			os.Exit(3)

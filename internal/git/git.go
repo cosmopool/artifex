@@ -4,33 +4,29 @@ import (
 	"os/exec"
 	"strings"
 
-	"github.com/cosmopool/artifex/logger"
+	"go.uber.org/zap"
 )
 
-// GitExec is separate so we can inject in Git and test all methods
-// This interface has only one method: execute git command and return it's error
-type IGit interface {
-	Do(...string) (string, error)
-	GetAllOptions() ([]string, error)
-	SetAllOptions([]string) error
-	CheckIfIsValidRepo() (bool, error)
+func New(log *zap.SugaredLogger) *Git {
+	return &Git{log: log}
 }
 
-type Git struct{}
+type Git struct {
+	log *zap.SugaredLogger
+}
 
 // Do executes a git command e.g.: 'git config --list'
 func (g *Git) Do(command ...string) (output string, err error) {
 	cmd := exec.Command("git", command...)
-	logger := logger.GetLogger()
-	logger.Debugf("command: %s", strings.Join(cmd.Args, " "))
+	g.log.Debugf("command: %s", strings.Join(cmd.Args, " "))
 	stdoutBytes, err := cmd.Output()
 	stdout := string(stdoutBytes)
 
 	if stdout != "" {
-		logger.Debugf("output: %s", stdout)
+		g.log.Debugf("output: %s", stdout)
 	}
 	if err != nil {
-		logger.Errorf("err: %s", cmd.Stderr)
+		g.log.Errorf("err: %s", cmd.Stderr)
 	}
 
 	return string(stdout), err
