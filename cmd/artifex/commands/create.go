@@ -135,8 +135,8 @@ func createRepository(fileName string, config interfaces.IConfiguration, fs inte
 	}
 	fmt.Println(path)
 
-	optionPath = configuration.REPOSITORY_IMPLEMENTATION_PATH
-	fileTemplate = configuration.REPOSITORY_IMPLEMENTATION
+	optionPath = configuration.REPOSITORY_INTERFACE_PATH
+	fileTemplate = configuration.REPOSITORY_INTERFACE
 
 	path, err = optionPathGeneration(fileName, optionPath, fileTemplate, config, fs)
 	if err != nil {
@@ -157,8 +157,8 @@ func createDatasource(fileName string, config interfaces.IConfiguration, fs inte
 	}
 	fmt.Println(path)
 
-	optionPath = configuration.DATASOURCE_IMPLEMENTATION_PATH
-	fileTemplate = configuration.DATASOURCE_IMPLEMENTATION
+	optionPath = configuration.DATASOURCE_INTERFACE_PATH
+	fileTemplate = configuration.DATASOURCE_INTERFACE
 
 	path, err = optionPathGeneration(fileName, optionPath, fileTemplate, config, fs)
 	if err != nil {
