@@ -27,7 +27,11 @@ func (f *FS) CreateDir(dir string) error {
 }
 
 func (f *FS) CreateFile(path, fileName string) error {
-	f.CreateDir(path)
+	err := f.CreateDir(path)
+	if err != nil {
+		f.log.Errorln("Encounter error trying to create file:", fileName)
+		f.log.Fatalln("Error:", err)
+	}
 
 	file, err := os.Create(fileName)
 	if err != nil {
