@@ -3,6 +3,7 @@ package filesystem
 import (
 	"os"
 	"os/exec"
+	"regexp"
 	"strings"
 
 	"go.uber.org/zap"
@@ -25,7 +26,9 @@ func (f *FS) CreateDir(dir string) error {
 	return nil
 }
 
-func (f *FS) CreateFile(fileName string) error {
+func (f *FS) CreateFile(path, fileName string) error {
+	f.CreateDir(path)
+
 	file, err := os.Create(fileName)
 	if err != nil {
 		f.log.Errorln("Encounter error trying to create file:", fileName)
@@ -46,6 +49,8 @@ func removeDoubleSlash(path string) string {
 
 // sanitizePath add a trailing '/' if non is present in `path`
 func sanitizePath(path string) string {
+	path = strings.TrimPrefix(path, "_")
+	path = strings.ReplaceAll(path, "_.", ".")
 	isValidPath := strings.HasPrefix(path, "/")
 	if isValidPath {
 		return path
@@ -70,7 +75,7 @@ func (f *FS) GeneratePath(dir string) string {
 // MakeFilePath add current dir path and `fileTemplate` to `dir`
 func (f *FS) GenerateFilePath(dir, fileTemplate, file, extension string) string {
 	prefix, suffix := f.TemplateSeparator(fileTemplate)
-	fileName := prefix + file + suffix + "." + extension
+	fileName := prefix + "_" + file + "_" + suffix + "." + extension
 	path := sanitizePath(dir) + sanitizePath(fileName)
 	path = strings.ReplaceAll(path, "\n", "")
 	path = strings.ToLower(path)
@@ -91,12 +96,22 @@ func (f *FS) TemplateSeparator(template string) (prefix, suffix string) {
 
 	if prefix != "" {
 		prefix = prefix + "_"
+		prefix = f.underline(prefix)
 	}
 	if suffix != "" {
 		suffix = "_" + suffix
+		suffix = f.underline(suffix)
 	}
 
 	return
+}
+
+func (*FS) underline(template string) string {
+	re := regexp.MustCompile(`[A-Z][^A-Z]*`)
+
+	submatchall := re.FindAllString(template, -1)
+	result := strings.Join(submatchall, "_")
+	return strings.ToLower(result)
 }
 
 func (*FS) currentDir() (currentDir string, err error) {
@@ -105,3 +120,18 @@ func (*FS) currentDir() (currentDir string, err error) {
 	currentDir = string(stdoutBytes)
 	return
 }
+
+// // IsRepoConfigured check if every configuration has some value.
+// // Return a array of all empty config
+// func (c *Config) IsRepoConfigured() (emptyOptions []string) {
+// 	emptyOptions = make([]string, 0, len(*c.Options))
+//
+// 	for _, config := range *c.Options {
+// 		isConfigNotSet := config.Value == ""
+// 		if isConfigNotSet {
+// 			emptyOptions = append(emptyOptions, config.Name)
+// 		}
+// 	}
+//
+// 	return
+// }
