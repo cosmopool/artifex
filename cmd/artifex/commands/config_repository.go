@@ -13,8 +13,8 @@ func configRepository(config interfaces.IConfiguration) (err error) {
 
 	terminal.Clear()
 
-	fmt.Println()
-	fmt.Println()
+	defaulValMessage()
+
 	fmt.Println()
 	fmt.Println()
 	fmt.Println("     ━━━━━━━━━━")

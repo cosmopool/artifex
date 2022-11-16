@@ -2,8 +2,6 @@ package commands
 
 import (
 	"fmt"
-	"os"
-	"os/exec"
 
 	"github.com/cosmopool/artifex/internal/interfaces"
 	"github.com/cosmopool/artifex/internal/terminal"
@@ -73,8 +71,6 @@ func InitConfigCommand(deps *interfaces.Dependencies) *cli.Command {
 					return err
 				}
 			}
-
-			defaulValMessage()
 
 			if shouldConfigUsecase || startInit {
 				err := configUsecase(deps.Config)
