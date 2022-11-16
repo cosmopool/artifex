@@ -92,13 +92,13 @@ func optionPathGeneration(
 	fileName, implementationOption, template string,
 	config interfaces.IConfiguration,
 	fs interfaces.IFileSystem,
-) (path string, err error) {
+) (filePath string, err error) {
 	dir, err := config.GetOption(implementationOption)
 	if err != nil {
 		return
 	}
 
-	path = fs.GeneratePath(dir)
+	path := fs.GeneratePath(dir)
 	fileTemplate, err := config.GetOption(template)
 	if err != nil {
 		return
@@ -109,7 +109,8 @@ func optionPathGeneration(
 		return
 	}
 
-	path = fs.GenerateFilePath(path, fileTemplate, fileName, extension)
+	filePath = fs.GenerateFilePath(path, fileTemplate, fileName, extension)
+	fs.CreateFile(path, filePath)
 	return
 }
 
